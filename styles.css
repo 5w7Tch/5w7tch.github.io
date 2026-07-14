@@ -1,0 +1,1091 @@
+/* ============================================================
+   Mona Lisa — download page
+   Dark slate + renaissance gold. Outfit (headings) / Work Sans (body).
+   ============================================================ */
+
+:root {
+  --bg: #000000;
+  --surface: #0D0F16;
+  --surface-2: #161923;
+  --border: #272B38;
+  --text: #EEF2FB;
+  --text-muted: #A8B3D1;
+  --gold: #E2B457;
+  --gold-strong: #C89B3F;
+  --gold-ink: #241A05;
+  --green: #4ADE80;
+  --red: #F87171;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow: 0 20px 50px rgba(0, 0, 0, .45);
+  --font-head: "Outfit", system-ui, -apple-system, sans-serif;
+  --font-body: "Work Sans", system-ui, -apple-system, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 96px; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  /* slide-in reveals overshoot the viewport edges */
+  overflow-x: hidden;
+}
+
+h1, h2, h3 { font-family: var(--font-head); line-height: 1.15; letter-spacing: -.01em; }
+
+a { color: var(--gold); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+code {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: .88em;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: .12em .4em;
+}
+
+.container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+/* ---------- focus visibility ---------- */
+a:focus-visible, button:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ============================ NAV ============================ */
+.nav-wrap {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+  background: rgba(4, 4, 5, .72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 34px;
+  width: 100%;
+  max-width: 1240px;
+  padding: 14px 28px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 1.02rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.brand:hover { text-decoration: none; }
+.brand { perspective: 220px; }
+
+/* solid 3D logo shield: face + edge layers stacked along Z */
+.brand-shield {
+  position: relative;
+  width: 26px;
+  height: 29px;
+  transform-style: preserve-3d;
+  animation: brand-spin 6s linear infinite;
+}
+.brand-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* per-face (not on the 3D parent — filters would flatten it) */
+  filter: drop-shadow(0 0 5px rgba(226, 180, 87, .4));
+}
+.brand-front { transform: translateZ(3px); }
+.brand-back  { transform: translateZ(-3px); }
+/* injected edge layers carry no glow — only the faces do */
+.brand-face.brand-edge { filter: none; }
+@keyframes brand-spin {
+  from { transform: rotateY(0deg); }
+  to   { transform: rotateY(360deg); }
+}
+
+.nav-links {
+  display: flex;
+  gap: 30px;
+  margin-left: auto;
+}
+.nav-links a {
+  position: relative;
+  color: var(--text-muted);
+  font-family: var(--font-head);
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  padding: 6px 2px;
+  transition: color .2s;
+}
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), rgba(226, 180, 87, 0));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .25s ease;
+}
+.nav-links a:hover { color: var(--text); text-decoration: none; }
+.nav-links a:hover::after { transform: scaleX(1); }
+
+/* scroll-spy: the tab for the section in view gets a neon underline */
+.nav-links a.active { color: var(--text); }
+.nav-links a.active::after {
+  transform: scaleX(1);
+  background: var(--gold);
+  box-shadow: 0 0 8px rgba(226, 180, 87, .95), 0 0 18px rgba(226, 180, 87, .55);
+}
+
+/* compact download button in the bar */
+.nav .btn {
+  font-size: .78rem;
+  letter-spacing: .12em;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+/* ============================ BUTTONS ============================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 26px;
+  border-radius: 999px;
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 1rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color .2s, border-color .2s, box-shadow .2s;
+  white-space: nowrap;
+}
+.btn:hover { text-decoration: none; }
+.btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+/* modern HUD-style download button: notched corners, neon glow, shine sweep */
+.btn-gold {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0;
+  clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+  background: linear-gradient(135deg, #EDC97E, var(--gold) 45%, var(--gold-strong));
+  color: var(--gold-ink);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  filter: drop-shadow(0 0 12px rgba(226, 180, 87, .35));
+  transition: filter .2s;
+}
+.btn-gold::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: -60%;
+  width: 40%;
+  background: linear-gradient(105deg, transparent, rgba(255, 255, 255, .55), transparent);
+  transform: skewX(-20deg);
+  transition: left .45s ease;
+}
+.btn-gold:hover { filter: drop-shadow(0 0 22px rgba(226, 180, 87, .65)); }
+.btn-gold:hover::after { left: 120%; }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border);
+}
+.btn-ghost:hover { background: var(--surface); border-color: #354370; }
+
+.btn-outline {
+  background: transparent;
+  color: var(--gold);
+  border-color: var(--gold-strong);
+}
+.btn-outline:hover { background: rgba(226, 180, 87, .1); }
+
+.btn-sm { padding: 9px 18px; font-size: .9rem; }
+.btn-sm svg { width: 16px; height: 16px; }
+
+/* ============================ HERO ============================ */
+.hero { padding: 170px 0 90px; overflow: hidden; }
+
+/* Desktop: the hero is a pinned stage — scrolling through its extra height
+   drives the left/right split instead of moving the page. */
+@media (min-width: 961px) {
+  .hero { height: 230vh; padding: 0; overflow: visible; }
+  .hero-pin {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+  .hero-pin .container { width: 100%; }
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 56px;
+  align-items: center;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--gold);
+  font-size: .85rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+  margin-bottom: 26px;
+}
+.eyebrow svg { width: 15px; height: 15px; }
+
+.hero h1 {
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  font-weight: 700;
+  margin-bottom: 22px;
+}
+
+.lede {
+  font-size: 1.15rem;
+  color: var(--text-muted);
+  max-width: 54ch;
+  margin-bottom: 34px;
+}
+.lede strong, .lede em { color: var(--text); }
+
+.cta-row { display: flex; flex-wrap: wrap; gap: 14px; }
+.cta-center { justify-content: center; }
+
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  list-style: none;
+  margin-top: 28px;
+  color: var(--text-muted);
+  font-size: .9rem;
+}
+.hero-meta li { display: flex; align-items: center; gap: 8px; }
+.hero-meta li::before {
+  content: "";
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+/* ---------- hero illustration ---------- */
+.hero-art { display: flex; justify-content: center; }
+
+.portrait-card {
+  position: relative;
+  border-radius: 22px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: 14px;
+  box-shadow: var(--shadow);
+  transform: rotate(1.5deg);
+}
+
+.portrait { display: block; width: min(320px, 70vw); height: auto; border-radius: 14px; }
+
+.scan-beam { animation: scan 4.4s ease-in-out infinite; }
+@keyframes scan {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(196px); }
+}
+
+.scan-frame { animation: frame-pulse 4.4s ease-in-out infinite; }
+@keyframes frame-pulse {
+  0%, 100% { opacity: .6; }
+  50%      { opacity: 1; }
+}
+
+.node { animation: node-pulse 4.4s ease-in-out infinite; }
+.node:nth-child(3n)   { animation-delay: .7s; }
+.node:nth-child(3n+1) { animation-delay: 1.5s; }
+.node:nth-child(4n)   { animation-delay: 2.3s; }
+@keyframes node-pulse {
+  0%, 100% { opacity: .45; }
+  50%      { opacity: 1; }
+}
+
+.chip {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 15px;
+  border-radius: 999px;
+  font-family: var(--font-head);
+  font-size: .82rem;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  background: rgba(13, 15, 22, .92);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, .4);
+  white-space: nowrap;
+}
+.chip svg { width: 15px; height: 15px; }
+.chip-ok    { color: var(--green); top: 26px; right: -34px; animation: float 5s ease-in-out infinite; }
+.chip-alert { color: var(--red); bottom: 44px; left: -44px; animation: float 5s ease-in-out 2.5s infinite; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+/* ============================ SECTIONS ============================ */
+.section { padding: 104px 0; }
+
+.section h2 {
+  font-size: clamp(1.8rem, 3.4vw, 2.5rem);
+  font-weight: 700;
+  max-width: 24ch;
+  margin-bottom: 16px;
+}
+
+.section-lede { color: var(--text-muted); font-size: 1.08rem; max-width: 62ch; margin-bottom: 56px; }
+
+/* ============================ HOW IT WORKS ============================ */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.step {
+  position: relative;
+  background: var(--bg);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 30px 26px 30px;
+}
+
+.step-num {
+  position: absolute;
+  top: -18px; left: 24px;
+  width: 38px; height: 38px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #EDC97E, var(--gold-strong));
+  color: var(--gold-ink);
+  border-radius: 50%;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 1.05rem;
+  box-shadow: 0 6px 16px rgba(226, 180, 87, .3);
+}
+
+.step h3 { font-size: 1.22rem; margin: 20px 0 10px; }
+.step p { color: var(--text-muted); font-size: .96rem; }
+.step p em, .step p strong { color: var(--text); font-style: normal; }
+
+/* ---------- step visuals (mock UI) ---------- */
+.step-visual { margin-top: 10px; }
+
+.mock {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  min-height: 172px;
+}
+
+/* enrollment mock */
+.mock-titlebar { display: flex; gap: 6px; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+.mock-titlebar span { width: 10px; height: 10px; border-radius: 50%; background: var(--border); }
+.mock-titlebar span:first-child { background: #E0604F; }
+.mock-titlebar span:nth-child(2) { background: #E0A63E; }
+.mock-titlebar span:nth-child(3) { background: #6BBE55; }
+
+.mock-face { display: flex; justify-content: center; padding: 14px 0 6px; color: var(--gold); }
+.mock-face svg { width: 74px; height: 74px; }
+
+.mock-progress {
+  height: 6px;
+  margin: 8px 40px 6px;
+  background: var(--surface-2);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.mock-progress i { display: block; width: 66%; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--gold-strong), var(--gold)); }
+.mock-enroll p { text-align: center; font-size: .8rem; color: var(--text-muted); padding-bottom: 12px; }
+
+/* menu-bar mock */
+.mock-menubar { display: flex; flex-direction: column; }
+.mock-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  padding: 8px 14px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  font-size: .78rem;
+  color: var(--text-muted);
+}
+.mock-bar-item { color: var(--gold); display: flex; }
+.mock-bar-item svg { width: 15px; height: 15px; }
+
+.mock-pulse {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 26px 18px 10px;
+  font-size: .88rem;
+  color: var(--text-muted);
+}
+.mock-pulse em { color: var(--green); font-style: normal; font-weight: 600; }
+
+.pulse-dot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(226, 180, 87, .5); }
+  50%      { box-shadow: 0 0 0 7px rgba(226, 180, 87, 0); }
+}
+
+.mock-ticks { display: flex; gap: 8px; padding: 12px 18px 22px; }
+.mock-ticks i { width: 26px; height: 8px; border-radius: 999px; background: var(--surface-2); }
+.mock-ticks i.ok { background: var(--green); opacity: .75; }
+
+/* lock-screen mock */
+.mock-lock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 20px 16px;
+  background: #05070F;
+}
+.mock-lock-icon { width: 26px; height: 26px; color: var(--red); }
+.mock-lock-title { font-family: var(--font-head); font-weight: 600; font-size: .95rem; }
+.mock-photo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--red);
+  color: var(--text-muted);
+  border-radius: 8px;
+  font-size: .78rem;
+  padding: 7px 12px;
+}
+.mock-photo svg { width: 16px; height: 16px; color: var(--red); }
+.mock-field {
+  width: 150px;
+  text-align: center;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 5px 0 7px;
+  font-size: .85rem;
+  letter-spacing: .18em;
+  color: var(--text-muted);
+}
+
+/* ============================ FEATURES (mini) ============================ */
+.section-mini { padding: 56px 0; }
+.section-mini h2 { font-size: 1.35rem; margin-bottom: 22px; }
+
+.features-mini {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px 40px;
+  max-width: 880px;
+}
+.features-mini li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: .92rem;
+  color: var(--text-muted);
+  background: var(--bg);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 18px 22px;
+}
+.features-mini svg {
+  width: 17px; height: 17px;
+  color: var(--gold);
+  flex-shrink: 0;
+  /* optically align with the first line of text */
+  margin-top: .28em;
+}
+.features-mini strong { color: var(--text); font-weight: 600; }
+
+.honesty-mini {
+  margin-top: 24px;
+  font-size: .85rem;
+  color: var(--text-muted);
+}
+
+/* ============================ INSTALL ============================ */
+.install-steps {
+  list-style: none;
+  counter-reset: install;
+  display: grid;
+  gap: 20px;
+  max-width: 780px;
+}
+
+.install-steps li {
+  counter-increment: install;
+  position: relative;
+  background: var(--bg);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 26px 28px 26px 86px;
+}
+.install-steps li::before {
+  content: counter(install);
+  position: absolute;
+  left: 26px; top: 26px;
+  width: 38px; height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--surface-2);
+  border: 1px solid var(--gold-strong);
+  color: var(--gold);
+  font-family: var(--font-head);
+  font-weight: 700;
+}
+.install-steps h3 { font-size: 1.15rem; margin-bottom: 8px; }
+.install-steps p { color: var(--text-muted); font-size: .96rem; }
+.install-steps p strong, .install-steps p em { color: var(--text); }
+
+.code-block {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-top: 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 13px 52px 13px 16px;
+  overflow-x: auto;
+}
+.code-block code, .code-block pre {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: .84rem;
+  line-height: 1.6;
+  white-space: pre;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 50%; right: 10px;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 34px; height: 34px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color .2s, border-color .2s;
+}
+.copy-btn:hover { color: var(--gold); border-color: var(--gold-strong); }
+.copy-btn svg { width: 15px; height: 15px; }
+.copy-btn.copied { color: var(--green); border-color: var(--green); }
+
+.source-build {
+  max-width: 780px;
+  margin-top: 26px;
+  background: var(--bg);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 26px 28px;
+}
+.source-build h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.15rem;
+  margin-bottom: 10px;
+}
+.source-build h3 svg { width: 18px; height: 18px; color: var(--gold); flex-shrink: 0; }
+.source-build > p { color: var(--text-muted); font-size: .94rem; }
+
+/* ============================ VERSIONS (tree) ============================ */
+/* Git-style tree: trunk root → v0.1.0 → branch split → roadmap leaves.
+   Paths self-draw and nodes/cards pop in when .drawn is toggled by script.js. */
+#versions .container { perspective: 1500px; }
+
+.vtree {
+  position: relative;
+  height: 1180px;
+  transform-style: preserve-3d;
+  /* script.js eases the tilt with scroll for a parallax hologram feel */
+  transform: rotateX(10deg);
+}
+.vtree::before {
+  content: "";
+  position: absolute;
+  inset: -6%;
+  background: radial-gradient(ellipse at 50% 55%, rgba(226, 180, 87, .08), transparent 62%);
+  pointer-events: none;
+}
+
+.vtree-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 0 7px rgba(226, 180, 87, .38));
+}
+.vt-path {
+  fill: none;
+  stroke: url(#vtGold);
+  stroke-width: 2.4;
+  vector-effect: non-scaling-stroke;
+  opacity: .9;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset .8s ease;
+}
+
+/* light pulses travelling up the branches once drawn */
+.vt-flow {
+  fill: none;
+  stroke: #FFEFC4;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: .08 .92;
+  opacity: 0;
+}
+.vtree.drawn .vt-flow {
+  opacity: .85;
+  animation: vt-flow 2.8s linear 3s infinite;
+}
+@keyframes vt-flow {
+  from { stroke-dashoffset: 1.08; }
+  to   { stroke-dashoffset: .08; }
+}
+.vtree.drawn .vt-path { stroke-dashoffset: 0; }
+.vt-p2 { transition-delay: .7s; }
+.vt-p3 { transition-delay: .9s; }
+.vt-p4 { transition-delay: 1.5s; }
+.vt-p5 { transition-delay: 1.7s; }
+.vt-p6 { transition-delay: 2.3s; }
+.vt-p7 { transition-delay: 2.5s; }
+.vt-p8 { transition-delay: 3.1s; }
+
+.vtree-node {
+  position: absolute;
+  width: 15px; height: 15px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, #FFF2CC, #E9C05F 45%, #7E5E20 95%);
+  box-shadow: 0 0 14px rgba(226, 180, 87, .55), 0 2px 6px rgba(0, 0, 0, .6);
+  transform: translate(-50%, -50%) scale(.3);
+  opacity: 0;
+  transition: opacity .35s ease, transform .35s ease;
+}
+.vtree.drawn .vtree-node { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+.vt-n1 { left: 50%; top: 95%; }
+.vt-n2 { left: 50%; top: 75%; transition-delay: .7s; }
+.vt-n3 { left: 50%; top: 55%; transition-delay: 1.5s; }
+.vt-n4 { left: 50%; top: 35%; transition-delay: 2.3s; }
+.vt-n5 { left: 50%; top: 14%; transition-delay: 3.1s; }
+
+.vt-glow { animation: vt-pulse 2.4s ease-out infinite; }
+@keyframes vt-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(226, 180, 87, .55); }
+  70%  { box-shadow: 0 0 0 16px rgba(226, 180, 87, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(226, 180, 87, 0); }
+}
+
+.vtree-tag {
+  position: absolute;
+  left: 50%; top: 95%;
+  transform: translate(18px, -50%);
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: .8rem;
+  color: var(--text-muted);
+  opacity: 0;
+  transition: opacity .5s ease .3s;
+  white-space: nowrap;
+}
+.vtree.drawn .vtree-tag { opacity: 1; }
+
+/* the released version — hangs off the trunk to the left, floating above the plane */
+.vtree-main {
+  position: absolute !important;
+  right: 64%;
+  top: 75%;
+  width: min(34%, 540px);
+  border-color: rgba(226, 180, 87, .35);
+  box-shadow: 0 26px 60px rgba(0, 0, 0, .6);
+  transform: translate(-24px, -50%) translateZ(42px);
+  opacity: 0;
+  transition: opacity .6s ease .9s, transform .6s ease .9s;
+}
+.vtree.drawn .vtree-main { opacity: 1; transform: translate(0, -50%) translateZ(42px); }
+
+/* the latest version — hangs off the trunk to the right, higher up */
+.vtree-main2 {
+  position: absolute !important;
+  left: 64%;
+  top: 55%;
+  width: min(34%, 540px);
+  border-color: rgba(226, 180, 87, .35);
+  box-shadow: 0 26px 60px rgba(0, 0, 0, .6);
+  transform: translate(24px, -50%) translateZ(42px);
+  opacity: 0;
+  transition: opacity .6s ease 1.8s, transform .6s ease 1.8s;
+}
+.vtree.drawn .vtree-main2 { opacity: 1; transform: translate(0, -50%) translateZ(42px); }
+
+/* the latest version — hangs off the trunk to the left, at the top */
+.vtree-main3 {
+  position: absolute !important;
+  right: 64%;
+  top: 35%;
+  width: min(34%, 540px);
+  border-color: rgba(226, 180, 87, .35);
+  box-shadow: 0 26px 60px rgba(0, 0, 0, .6);
+  transform: translate(-24px, -50%) translateZ(42px);
+  opacity: 0;
+  transition: opacity .6s ease 2.5s, transform .6s ease 2.5s;
+}
+.vtree.drawn .vtree-main3 { opacity: 1; transform: translate(0, -50%) translateZ(42px); }
+
+/* v0.4.0 — right side, top */
+.vtree-main4 {
+  position: absolute !important;
+  left: 64%;
+  top: 14%;
+  width: min(34%, 540px);
+  border-color: rgba(226, 180, 87, .35);
+  box-shadow: 0 26px 60px rgba(0, 0, 0, .6);
+  transform: translate(24px, -50%) translateZ(42px);
+  opacity: 0;
+  transition: opacity .6s ease 3.3s, transform .6s ease 3.3s;
+}
+.vtree.drawn .vtree-main4 { opacity: 1; transform: translate(0, -50%) translateZ(42px); }
+
+.vt-l1 { left: calc(73% + 18px);  top: 29%; transition-delay: 2.3s; }
+.vt-l2 { right: calc(73% + 18px); top: 21%; transition-delay: 2.5s; }
+.vt-l3 { left: calc(73% + 18px);  top: 12%; transition-delay: 2.7s; }
+.vt-l4 { right: calc(73% + 18px); top: 5%;  transition-delay: 2.9s; }
+
+.release {
+  position: relative;
+  background: var(--bg);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 28px 30px;
+}
+
+.release-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.release-tag {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-weight: 600;
+  font-size: .95rem;
+  color: var(--gold);
+}
+
+.release-badge {
+  padding: 3px 11px;
+  border-radius: 999px;
+  background: rgba(74, 222, 128, .14);
+  border: 1px solid rgba(74, 222, 128, .4);
+  color: var(--green);
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .03em;
+}
+
+.release-head time { color: var(--text-muted); font-size: .88rem; margin-left: auto; }
+
+.release h3 { font-size: 1.2rem; margin-bottom: 12px; }
+
+.release ul { list-style: none; display: grid; gap: 8px; margin-bottom: 20px; }
+.release ul li {
+  position: relative;
+  padding-left: 22px;
+  color: var(--text-muted);
+  font-size: .94rem;
+}
+.release ul li::before {
+  content: "";
+  position: absolute;
+  left: 2px; top: .58em;
+  width: 7px; height: 7px;
+  border-radius: 2px;
+  background: var(--gold-strong);
+}
+
+/* ============================ SCROLL REVEAL ============================ */
+/* Elements get .reveal + a direction class from script.js; .visible is
+   toggled by an IntersectionObserver so they re-animate on every pass. */
+.reveal {
+  opacity: 0;
+  transition: opacity .7s ease, transform .7s ease;
+  will-change: opacity, transform;
+}
+.reveal-left  { transform: translate(-64px, 30px); }
+.reveal-right { transform: translate(64px, 30px); }
+.reveal-up    { transform: translateY(44px); }
+.reveal.visible { opacity: 1; transform: none; }
+
+/* ============================ SCROLL-DRIVEN 3D SHIELD ============================ */
+/* A huge shield pinned to the middle of the viewport from the hero split
+   until the Versions section begins; script.js maps scroll to rotateY and
+   lifts it away as Versions arrives. */
+.scrolly { position: relative; }
+.scrolly .section { position: relative; z-index: 1; }
+
+.shield-stage {
+  position: fixed;
+  top: 50vh;
+  left: 0;
+  right: 0;
+  height: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+.shield3d {
+  width: min(440px, 42vw);
+  height: min(510px, 48vw);
+  transform: translateY(-50%);
+  perspective: 1400px;
+  opacity: .92;
+  will-change: transform;
+}
+.shield3d-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.shield-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  filter: drop-shadow(0 0 46px rgba(237, 196, 104, .45));
+}
+.shield-front { transform: translateZ(14px); }
+.shield-back  { transform: rotateY(180deg) translateZ(14px); }
+
+/* solid-thickness layers injected by script.js */
+.shield-edge {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Desktop: split scrolly content to the sides of the center corridor */
+@media (min-width: 961px) {
+  /* use the full viewport width — side blocks hug the screen edges */
+  .scrolly .container { max-width: none; padding: 0 clamp(28px, 4vw, 72px); }
+
+  .scrolly .section h2,
+  .scrolly .section-lede { text-align: center; margin-inline: auto; }
+
+  /* each segment's headline pins below the nav while its content scrolls */
+  .scrolly .section h2 {
+    position: sticky;
+    top: 74px;
+    z-index: 3;
+    padding: 10px 0;
+    text-shadow: 0 2px 18px rgba(0, 0, 0, .95), 0 0 44px rgba(0, 0, 0, .85);
+  }
+
+  .scrolly .install-steps { max-width: none; }
+  .scrolly .install-steps li { width: 38%; }
+  .scrolly .install-steps li:nth-child(even) { justify-self: end; }
+  /* takes the next slot in the alternating flow: steps go L, R, L — this goes R */
+  .scrolly .source-build { width: 38%; max-width: none; margin-left: auto; }
+
+  .scrolly .steps { display: flex; flex-direction: column; gap: 46px; }
+  .scrolly .step { width: 38%; }
+  .scrolly .step:nth-child(even) { align-self: flex-end; }
+
+  .scrolly .features-mini {
+    max-width: none;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .scrolly .features-mini li { width: 38%; }
+  .scrolly .features-mini li:nth-child(even) { align-self: flex-end; }
+  .scrolly .honesty-mini { text-align: center; }
+}
+
+/* Small screens: no center shield, and the tree flattens into stacked cards */
+@media (max-width: 960px) {
+  .shield-stage { display: none; }
+  .vtree { height: auto; transform: none; }
+  .vtree::before { display: none; }
+  .vtree-lines, .vtree-node, .vtree-tag { display: none; }
+  .vtree-main, .vtree-main2, .vtree-main3, .vtree-main4 {
+    position: static !important;
+    width: auto;
+    opacity: 1;
+    transform: none;
+    margin-top: 14px;
+  }
+}
+
+/* ============================ FINAL CTA / FOOTER ============================ */
+.final-cta { text-align: center; }
+.final-cta h2 { margin: 0 auto 34px; }
+.final-note { margin-top: 20px; color: var(--text-muted); font-size: .9rem; }
+
+.footer { border-top: 1px solid var(--border); padding: 34px 0; }
+.footer-grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: var(--text-muted);
+  font-size: .9rem;
+}
+.footer nav { display: flex; flex-wrap: wrap; gap: 22px; }
+.footer nav a { color: var(--text-muted); transition: color .2s; }
+.footer nav a:hover { color: var(--gold); text-decoration: none; }
+
+/* ============================ RESPONSIVE ============================ */
+@media (max-width: 960px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 64px; }
+  .hero { padding-top: 140px; }
+  .hero-copy { text-align: center; }
+  .lede { margin-inline: auto; }
+  .cta-row { justify-content: center; }
+  .hero-meta { justify-content: center; }
+  .steps { grid-template-columns: 1fr; max-width: 460px; margin-inline: auto; }
+  .chip-ok { right: -8px; }
+  .chip-alert { left: -8px; }
+}
+
+@media (max-width: 640px) {
+  .nav-links { display: none; }
+  .section { padding: 72px 0; }
+  .features-mini { grid-template-columns: 1fr; }
+  .install-steps li { padding: 24px 22px 24px 22px; }
+  .install-steps li::before { position: static; margin-bottom: 12px; }
+  .release-head time { margin-left: 0; width: 100%; }
+}
+
+/* ============================ REDUCED MOTION ============================ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .scan-beam, .scan-frame, .node, .chip-ok, .chip-alert, .pulse-dot, .vt-glow, .vt-flow, .brand-shield { animation: none; }
+  .reveal { opacity: 1; transform: none; }
+  .vt-path { stroke-dashoffset: 0; transition: none; }
+  .vtree-node, .vtree-tag, .vtree-main, .vtree-main2, .vtree-main3, .vtree-main4 { opacity: 1; transition: none; }
+  .vtree-node { transform: translate(-50%, -50%); }
+  .vtree-main, .vtree-main2, .vtree-main3, .vtree-main4 { transform: translate(0, -50%) translateZ(42px); }
+  * { transition-duration: .01ms !important; }
+}
+
+/* Past-release marker in the version tree (no public download for old builds). */
+.past-release {
+  font-size: .82rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ============================ SUB-PAGES (pricing, legal) ============================ */
+.subnav {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(4, 4, 5, .82);
+  backdrop-filter: saturate(140%) blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+.subnav-inner { display: flex; align-items: center; gap: 20px; height: 66px; }
+.subnav .brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-head); font-weight: 700; color: var(--text); }
+.subnav .brand svg { width: 26px; height: 29px; }
+.subnav-links { display: flex; gap: 22px; margin-left: auto; }
+.subnav-links a { color: var(--text-muted); font-size: .95rem; }
+.subnav-links a:hover { color: var(--gold); }
+
+.page { padding: 72px 0 96px; }
+.page-narrow { max-width: 760px; }
+.page .eyebrow { margin-bottom: 18px; }
+.page h1 { font-family: var(--font-head); font-weight: 700; font-size: clamp(2rem, 4vw, 2.9rem); letter-spacing: -.02em; line-height: 1.08; }
+.page .updated { color: var(--text-muted); font-size: .92rem; margin-top: 10px; }
+
+.legal { color: var(--text-muted); line-height: 1.75; font-size: 1.02rem; }
+.legal h2 { font-family: var(--font-head); color: var(--text); font-size: 1.3rem; margin: 40px 0 12px; letter-spacing: -.01em; }
+.legal p { margin: 0 0 16px; }
+.legal ul { margin: 0 0 16px; padding-left: 22px; }
+.legal li { margin: 0 0 8px; }
+.legal a { color: var(--gold); }
+.legal strong { color: var(--text); }
+.legal .callout {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 16px 20px; margin: 0 0 20px;
+}
+
+/* Pricing */
+.pricing-wrap { display: flex; justify-content: center; margin-top: 44px; }
+.price-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 40px 36px; max-width: 420px; width: 100%;
+  box-shadow: var(--shadow); text-align: center; position: relative;
+}
+.price-card .plan-name { font-family: var(--font-head); font-weight: 600; color: var(--gold); letter-spacing: .04em; text-transform: uppercase; font-size: .82rem; }
+.price-card .price { font-family: var(--font-head); font-weight: 700; font-size: 3.2rem; color: var(--text); margin: 10px 0 2px; letter-spacing: -.02em; }
+.price-card .price span { font-size: 1.1rem; color: var(--text-muted); font-weight: 500; }
+.price-card .per-device { color: var(--text-muted); font-size: .95rem; margin-bottom: 26px; }
+.price-card ul { list-style: none; text-align: left; margin: 0 0 30px; display: grid; gap: 12px; }
+.price-card li { display: flex; gap: 10px; align-items: flex-start; color: var(--text); font-size: .98rem; }
+.price-card li svg { width: 18px; height: 18px; color: var(--green); flex-shrink: 0; margin-top: 3px; }
+.price-card .btn { width: 100%; justify-content: center; }
+.price-note { color: var(--text-muted); font-size: .9rem; text-align: center; margin-top: 22px; max-width: 52ch; margin-inline: auto; }
+
+.footer nav a + a { margin-left: 18px; }

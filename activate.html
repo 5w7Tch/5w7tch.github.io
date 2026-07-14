@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Subscribe this Mac — Mona Lisa</title>
+<meta name="description" content="Activate Mona Lisa protection for this Mac.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 27'%3E%3Cpath fill-rule='evenodd' d='M12 1 L22 5 V12 C22 19 17.5 23.7 12 25.8 C6.5 23.7 2 19 2 12 V5 Z M12 3.7 L19.8 6.9 V12.3 C19.8 17.8 16.3 21.4 12 23.1 C7.7 21.4 4.2 17.8 4.2 12.3 V6.9 Z' fill='%23E2B457'/%3E%3C/svg%3E">
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+<style>
+  :root { --gold: #E2B457; --ink: #0a0a0a; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--ink); color: #f5f5f5;
+    font-family: "Work Sans", system-ui, sans-serif;
+    min-height: 100vh; display: grid; place-items: center; padding: 24px;
+  }
+  .card {
+    width: 100%; max-width: 420px; text-align: center;
+    background: #131313; border: 1px solid rgba(226,180,87,.18);
+    border-radius: 20px; padding: 40px 32px;
+  }
+  .shield { width: 56px; height: 63px; margin: 0 auto 20px; display: block; }
+  h1 { font-family: "Outfit", sans-serif; font-weight: 700; font-size: 1.5rem; letter-spacing: -.01em; }
+  p.sub { color: #a8a8a8; font-size: .98rem; line-height: 1.6; margin: 12px 0 28px; }
+  button {
+    width: 100%; cursor: pointer; font: inherit; font-weight: 600;
+    background: var(--gold); color: #1a1400; border: none;
+    border-radius: 12px; padding: 14px 20px; font-size: 1rem;
+    transition: filter .2s ease;
+  }
+  button:hover { filter: brightness(1.08); }
+  button:disabled { opacity: .5; cursor: default; }
+  .device { margin-top: 24px; font-size: .75rem; color: #6a6a6a; word-break: break-all; }
+  .msg { margin-top: 18px; font-size: .9rem; color: var(--gold); min-height: 1.2em; }
+  .msg.err { color: #ff8a7a; }
+  a { color: var(--gold); text-decoration: none; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <svg class="shield" viewBox="0 0 24 27" aria-hidden="true">
+      <path fill-rule="evenodd" d="M12 1 L22 5 V12 C22 19 17.5 23.7 12 25.8 C6.5 23.7 2 19 2 12 V5 Z M12 3.7 L19.8 6.9 V12.3 C19.8 17.8 16.3 21.4 12 23.1 C7.7 21.4 4.2 17.8 4.2 12.3 V6.9 Z" fill="#E2B457"/>
+    </svg>
+    <h1>Protect this Mac</h1>
+    <p class="sub">Subscribe to turn on Mona Lisa protection for this device. Your subscription covers this Mac only.</p>
+    <button id="subscribe" disabled>Loading…</button>
+    <div class="msg" id="msg"></div>
+    <p class="device" id="device"></p>
+    <p class="device"><a href="index.html">← Back to Mona Lisa</a></p>
+  </div>
+
+  <script>
+    // ── Paddle account settings — fill these in after creating the product ──
+    const PADDLE_ENVIRONMENT = "sandbox";                 // "sandbox" while testing, "production" when live
+    const PADDLE_CLIENT_TOKEN = "REPLACE_WITH_CLIENT_TOKEN"; // Paddle → Developer tools → Authentication (client-side token)
+    const PADDLE_PRICE_ID     = "REPLACE_WITH_PRICE_ID";     // the recurring Price id, e.g. pri_01h…
+
+    const params = new URLSearchParams(location.search);
+    const deviceId = params.get("device");
+    const btn = document.getElementById("subscribe");
+    const msg = document.getElementById("msg");
+
+    function fail(text) { msg.textContent = text; msg.classList.add("err"); btn.disabled = true; btn.textContent = "Unavailable"; }
+
+    if (!deviceId) {
+      fail("No device specified. Open this page from the Mona Lisa app.");
+    } else {
+      document.getElementById("device").textContent = "Device " + deviceId.slice(0, 12);
+      try {
+        if (PADDLE_ENVIRONMENT === "sandbox") Paddle.Environment.set("sandbox");
+        Paddle.Initialize({ token: PADDLE_CLIENT_TOKEN });
+        btn.disabled = false;
+        btn.textContent = "Subscribe this Mac";
+      } catch (e) {
+        fail("Checkout failed to load. Please try again.");
+      }
+    }
+
+    btn.addEventListener("click", () => {
+      msg.textContent = ""; msg.classList.remove("err");
+      Paddle.Checkout.open({
+        items: [{ priceId: PADDLE_PRICE_ID, quantity: 1 }],
+        // Rides through to the subscription and every webhook as custom_data.device_id,
+        // so the backend binds this subscription to this exact Mac.
+        customData: { device_id: deviceId },
+        settings: { displayMode: "overlay", theme: "dark" }
+      });
+    });
+  </script>
+</body>
+</html>
