@@ -55,9 +55,9 @@
 
   <script>
     // ── Paddle account settings — fill these in after creating the product ──
-    const PADDLE_ENVIRONMENT = "sandbox";                 // "sandbox" while testing, "production" when live
-    const PADDLE_CLIENT_TOKEN = "REPLACE_WITH_CLIENT_TOKEN"; // Paddle → Developer tools → Authentication (client-side token)
-    const PADDLE_PRICE_ID     = "REPLACE_WITH_PRICE_ID";     // the recurring Price id, e.g. pri_01h…
+    const PADDLE_ENVIRONMENT = "production";               // live
+    const PADDLE_CLIENT_TOKEN = "REPLACE_WITH_CLIENT_TOKEN"; // Paddle → Developer tools → Authentication → Client-side tokens (live_…)
+    const PADDLE_PRICE_ID     = "pri_01kxh6ctdedqmmef5e2e350z7h"; // live "Annual — 1 Mac" $9.99/yr
 
     const params = new URLSearchParams(location.search);
     const deviceId = params.get("device");
