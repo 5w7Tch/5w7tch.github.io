@@ -291,13 +291,13 @@
             <p class="mock-lock-title">This Mac is locked</p>
             <div class="mock-photo">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-              <span>Photo captured</span>
+              <span>Recording video</span>
             </div>
             <div class="mock-field">••••••••</div>
           </div>
         </div>
         <h3>Strangers get locked out — on camera</h3>
-        <p>Two consecutive unknown-face sightings and Mona Lisa saves a timestamped photo of the intruder, then drops a full-screen lock over <em>every</em> display. It disables force-quit and app switching, re-applies itself after a reboot, and unlocks with your password.</p>
+        <p>The moment it's sure an unrecognized person is using the Mac, it drops a full-screen lock over <em>every</em> display and records <strong>video</strong> of the whole locked period. It disables force-quit and app switching, re-applies itself after a reboot, and unlocks with your password — or a trusted face passing a blink check.</p>
       </article>
 
     </div>
@@ -311,7 +311,7 @@
     <ul class="features-mini">
       <li>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        <span><strong>Intruder snapshots</strong> — photo of whoever triggered it</span>
+        <span><strong>Intruder video</strong> — records the entire locked period</span>
       </li>
       <li>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
@@ -380,23 +380,6 @@
 
       <article class="release vtree-main">
         <header class="release-head">
-          <span class="release-tag">v0.1.0</span>
-          <time datetime="2026-07-10">July 10, 2026</time>
-        </header>
-        <h3>First public release</h3>
-        <ul>
-          <li>Menu-bar background agent with periodic one-shot camera checks (camera off between checks)</li>
-          <li>Multi-person face enrollment with live preview and auto-calibrated matching threshold</li>
-          <li>Full-screen kiosk lock across all displays — survives force-quit attempts <em>and</em> reboots</li>
-          <li>Intruder photo capture to <code>~/Pictures/Mona Lisa Intruders</code>, shown on the lock screen</li>
-          <li>Named activity log of sightings and lock/unlock events</li>
-          <li>PBKDF2-SHA256 unlock password; launch-at-login</li>
-        </ul>
-        <span class="past-release">Past release</span>
-      </article>
-
-      <article class="release vtree-main2">
-        <header class="release-head">
           <span class="release-tag">v0.2.0</span>
           <time datetime="2026-07-11">July 11, 2026</time>
         </header>
@@ -410,7 +393,7 @@
         <span class="past-release">Past release</span>
       </article>
 
-      <article class="release vtree-main3">
+      <article class="release vtree-main2">
         <header class="release-head">
           <span class="release-tag">v0.3.0</span>
           <time datetime="2026-07-11">July 11, 2026</time>
@@ -424,22 +407,33 @@
         <span class="past-release">Past release</span>
       </article>
 
-      <article class="release release-current vtree-main4">
+      <article class="release vtree-main3">
         <header class="release-head">
           <span class="release-tag">v0.4.1</span>
-          <span class="release-badge">Latest</span>
           <time datetime="2026-07-14">July 14, 2026</time>
         </header>
         <h3>Real face recognition</h3>
         <ul>
-          <li>On-device <strong>SFace</strong> Core ML model — reliably tells people apart, now with precise 5-point alignment</li>
+          <li>On-device <strong>SFace</strong> Core ML model — reliably tells people apart, with precise 5-point alignment</li>
           <li>Fail-secure presence lock: a clearly-unrecognized person is locked out in about a second</li>
           <li>Records <strong>video</strong> of the whole locked period, not a photo</li>
           <li>Face unlock with a blink liveness check — a photo can't unlock; password always works</li>
-          <li>Redesigned menu-bar panel and Settings</li>
-          <li><strong>Re-enroll everyone after updating</strong> — face data from earlier versions is retired automatically</li>
         </ul>
-        <a class="btn btn-outline btn-sm" href="https://github.com/5w7Tch/Mona-Lisa-Web/releases/download/v0.4.1/MonaLisa.dmg">
+        <span class="past-release">Past release</span>
+      </article>
+
+      <article class="release release-current vtree-main4">
+        <header class="release-head">
+          <span class="release-tag">v0.4.2</span>
+          <span class="release-badge">Latest</span>
+          <time datetime="2026-07-15">July 15, 2026</time>
+        </header>
+        <h3>Automatic updates</h3>
+        <ul>
+          <li>Checks for a newer version on launch and once a day, and guides you to update when one is available — so everyone stays on the latest, most accurate build</li>
+          <li>Builds on 0.4.1: on-device SFace recognition, fail-secure presence lock, video capture of the locked period, and blink-liveness face unlock</li>
+        </ul>
+        <a class="btn btn-outline btn-sm" href="https://github.com/5w7Tch/Mona-Lisa-Web/releases/latest/download/MonaLisa.dmg">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           MonaLisa.dmg · 36&nbsp;MB
         </a>
