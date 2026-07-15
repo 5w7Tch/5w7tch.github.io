@@ -486,7 +486,7 @@
   // versions. Raise MIN_TO_SHOW to hide it until the count is more impressive
   // (e.g. 100); 0 shows it as soon as there's any.
   (function () {
-    var MIN_TO_SHOW = 0;
+    var MIN_TO_SHOW = 100;
     var wrap = document.getElementById("dlCount"), num = document.getElementById("dlNum");
     if (!wrap || !num) return;
     fetch("https://api.github.com/repos/5w7Tch/Mona-Lisa-Web/releases")
