@@ -70,6 +70,10 @@
           How it works
         </a>
       </div>
+      <p id="dlCount" hidden style="margin-top:16px;font-size:.92rem;color:var(--text-muted,#9a9a9a);display:flex;align-items:center;gap:7px;">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#E2B457" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span><strong id="dlNum" style="color:#E2B457;"></strong> downloads</span>
+      </p>
       <ul class="hero-meta">
         <li>Runs fully on-device</li>
         <li>On-device face model</li>
@@ -477,5 +481,24 @@
 </footer>
 
 <script src="script.js"></script>
+<script>
+  // Live download count from GitHub releases — the real number, summed across all
+  // versions. Raise MIN_TO_SHOW to hide it until the count is more impressive
+  // (e.g. 100); 0 shows it as soon as there's any.
+  (function () {
+    var MIN_TO_SHOW = 0;
+    var wrap = document.getElementById("dlCount"), num = document.getElementById("dlNum");
+    if (!wrap || !num) return;
+    fetch("https://api.github.com/repos/5w7Tch/Mona-Lisa-Web/releases")
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+      .then(function (rels) {
+        var total = rels.reduce(function (s, rel) {
+          return s + (rel.assets || []).reduce(function (a, x) { return a + (x.download_count || 0); }, 0);
+        }, 0);
+        if (total >= MIN_TO_SHOW) { num.textContent = total.toLocaleString(); wrap.hidden = false; }
+      })
+      .catch(function () { /* network/rate-limit: just stay hidden */ });
+  })();
+</script>
 </body>
 </html>
