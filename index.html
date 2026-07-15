@@ -384,20 +384,6 @@
 
       <article class="release vtree-main">
         <header class="release-head">
-          <span class="release-tag">v0.3.0</span>
-          <time datetime="2026-07-11">July 11, 2026</time>
-        </header>
-        <h3>More accurate recognition</h3>
-        <ul>
-          <li>Face alignment — each face is leveled and scaled to a consistent crop before matching, so lighting and head tilt matter far less</li>
-          <li>Quality gating — frames too far or too dark are skipped instead of guessed, with live coaching during enrollment</li>
-          <li>Corroborated matching — two enrolled samples must agree, so a fluke frame can't authorize the wrong person</li>
-        </ul>
-        <span class="past-release">Past release</span>
-      </article>
-
-      <article class="release vtree-main2">
-        <header class="release-head">
           <span class="release-tag">v0.4.1</span>
           <time datetime="2026-07-14">July 14, 2026</time>
         </header>
@@ -411,7 +397,7 @@
         <span class="past-release">Past release</span>
       </article>
 
-      <article class="release vtree-main3">
+      <article class="release vtree-main2">
         <header class="release-head">
           <span class="release-tag">v0.4.2</span>
           <time datetime="2026-07-15">July 15, 2026</time>
@@ -424,16 +410,29 @@
         <span class="past-release">Past release</span>
       </article>
 
-      <article class="release release-current vtree-main4">
+      <article class="release vtree-main3">
         <header class="release-head">
           <span class="release-tag">v0.4.3</span>
-          <span class="release-badge">Latest</span>
           <time datetime="2026-07-15">July 15, 2026</time>
         </header>
         <h3>Can't be switched off</h3>
         <ul>
-          <li>Pausing or quitting now requires your unlock password — or a blink — the same check as the lock screen, so an unauthorized person can't just turn protection off</li>
-          <li>Builds on 0.4.2: automatic update checks, on-device SFace recognition, and video capture of the locked period</li>
+          <li>Pausing or quitting requires your unlock password — or a blink — the same check as the lock screen, so an unauthorized person can't just turn protection off</li>
+          <li>Redesigned, in-panel update prompt</li>
+        </ul>
+        <span class="past-release">Past release</span>
+      </article>
+
+      <article class="release release-current vtree-main4">
+        <header class="release-head">
+          <span class="release-tag">v0.4.4</span>
+          <span class="release-badge">Latest</span>
+          <time datetime="2026-07-15">July 15, 2026</time>
+        </header>
+        <h3>Harder to shut off</h3>
+        <ul>
+          <li>A Terminal <code>kill</code> / <code>killall</code> can no longer silently stop protection — it goes through the same password / blink check as Pause and Quit</li>
+          <li>Builds on 0.4.3: authenticate to pause or quit, and the in-panel update prompt</li>
         </ul>
         <a class="btn btn-outline btn-sm" href="https://github.com/5w7Tch/5w7tch.github.io/releases/latest/download/MonaLisa.dmg">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
