@@ -3,13 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Subscribe this Mac — Mona Lisa</title>
-<meta name="description" content="Activate Mona Lisa protection for this Mac.">
+<title>Unlock this Mac — Mona Lisa</title>
+<meta name="description" content="Activate Mona Lisa protection for this Mac with USDC on Base.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 27'%3E%3Cpath fill-rule='evenodd' d='M12 1 L22 5 V12 C22 19 17.5 23.7 12 25.8 C6.5 23.7 2 19 2 12 V5 Z M12 3.7 L19.8 6.9 V12.3 C19.8 17.8 16.3 21.4 12 23.1 C7.7 21.4 4.2 17.8 4.2 12.3 V6.9 Z' fill='%23E2B457'/%3E%3C/svg%3E">
-<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
 <style>
   :root { --gold: #E2B457; --ink: #0a0a0a; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -19,24 +18,33 @@
     min-height: 100vh; display: grid; place-items: center; padding: 24px;
   }
   .card {
-    width: 100%; max-width: 420px; text-align: center;
+    width: 100%; max-width: 460px;
     background: #131313; border: 1px solid rgba(226,180,87,.18);
-    border-radius: 20px; padding: 40px 32px;
+    border-radius: 20px; padding: 36px 30px;
   }
-  .shield { width: 56px; height: 63px; margin: 0 auto 20px; display: block; }
-  h1 { font-family: "Outfit", sans-serif; font-weight: 700; font-size: 1.5rem; letter-spacing: -.01em; }
-  p.sub { color: #a8a8a8; font-size: .98rem; line-height: 1.6; margin: 12px 0 28px; }
-  button {
-    width: 100%; cursor: pointer; font: inherit; font-weight: 600;
-    background: var(--gold); color: #1a1400; border: none;
-    border-radius: 12px; padding: 14px 20px; font-size: 1rem;
-    transition: filter .2s ease;
-  }
-  button:hover { filter: brightness(1.08); }
-  button:disabled { opacity: .5; cursor: default; }
-  .device { margin-top: 24px; font-size: .75rem; color: #6a6a6a; word-break: break-all; }
-  .msg { margin-top: 18px; font-size: .9rem; color: var(--gold); min-height: 1.2em; }
-  .msg.err { color: #ff8a7a; }
+  .shield { width: 48px; height: 54px; margin: 0 auto 16px; display: block; }
+  h1 { font-family: "Outfit", sans-serif; font-weight: 700; font-size: 1.4rem; text-align: center; }
+  p.sub { color: #a8a8a8; font-size: .95rem; line-height: 1.55; margin: 10px 0 22px; text-align: center; }
+  .plans { display: flex; gap: 10px; margin-bottom: 22px; }
+  .plan { flex: 1; border: 1px solid rgba(255,255,255,.12); border-radius: 12px; padding: 12px; text-align: center; }
+  .plan .amt { font-family: "Outfit", sans-serif; font-weight: 700; font-size: 1.25rem; color: var(--gold); }
+  .plan .per { font-size: .8rem; color: #8a8a8a; }
+  .label { font-size: .8rem; color: #8a8a8a; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
+  .addr { display: flex; align-items: center; gap: 8px; background: #0c0c0c; border: 1px solid rgba(255,255,255,.12);
+          border-radius: 10px; padding: 11px 12px; font-family: ui-monospace, Menlo, monospace; font-size: .82rem; word-break: break-all; }
+  .addr code { color: #f5f5f5; flex: 1; }
+  .addr button, .verify { cursor: pointer; font: inherit; font-weight: 600; border: none; border-radius: 8px; }
+  .addr button { background: var(--gold); color: #1a1400; padding: 6px 12px; font-size: .8rem; white-space: nowrap; }
+  .net { font-size: .82rem; color: #ffcf6b; background: rgba(226,180,87,.09); border: 1px solid rgba(226,180,87,.25);
+         border-radius: 8px; padding: 9px 12px; margin: 12px 0 20px; line-height: 1.45; }
+  input { width: 100%; font: inherit; font-family: ui-monospace, Menlo, monospace; font-size: .82rem; color: #f5f5f5;
+          background: #0c0c0c; border: 1px solid rgba(255,255,255,.14); border-radius: 10px; padding: 11px 12px; margin-top: 6px; }
+  .verify { width: 100%; background: var(--gold); color: #1a1400; padding: 13px; font-size: 1rem; margin-top: 14px;
+            border-radius: 12px; transition: filter .2s ease; }
+  .verify:hover { filter: brightness(1.08); } .verify:disabled { opacity: .5; cursor: default; }
+  .msg { margin-top: 16px; font-size: .9rem; text-align: center; min-height: 1.2em; line-height: 1.5; }
+  .msg.err { color: #ff8a7a; } .msg.ok { color: #7ee0a0; } .msg.info { color: var(--gold); }
+  .foot { margin-top: 22px; text-align: center; font-size: .72rem; color: #6a6a6a; word-break: break-all; }
   a { color: var(--gold); text-decoration: none; }
 </style>
 </head>
@@ -45,50 +53,67 @@
     <svg class="shield" viewBox="0 0 24 27" aria-hidden="true">
       <path fill-rule="evenodd" d="M12 1 L22 5 V12 C22 19 17.5 23.7 12 25.8 C6.5 23.7 2 19 2 12 V5 Z M12 3.7 L19.8 6.9 V12.3 C19.8 17.8 16.3 21.4 12 23.1 C7.7 21.4 4.2 17.8 4.2 12.3 V6.9 Z" fill="#E2B457"/>
     </svg>
-    <h1>Protect this Mac</h1>
-    <p class="sub">Start a <strong style="color:#f5f5f5">7-day free trial</strong>, then $9.99/year — this Mac only. Cancel anytime during the trial and you won't be charged.</p>
-    <button id="subscribe" disabled>Loading…</button>
+    <h1>Unlock this Mac</h1>
+    <p class="sub">Pay with USDC to protect this device. This covers this Mac only.</p>
+
+    <div class="plans">
+      <div class="plan"><div class="amt">$0.99</div><div class="per">1 month</div></div>
+      <div class="plan"><div class="amt">$9.99</div><div class="per">1 year</div></div>
+    </div>
+
+    <div class="label">Send USDC to this address</div>
+    <div class="addr">
+      <code id="addr">0x071056FaE2fB98Fbb90e368b66e11BeeC0b0ddcc</code>
+      <button id="copy" type="button">Copy</button>
+    </div>
+    <div class="net">⚠️ <strong>USDC on the Base network only.</strong> Send $0.99 for 1 month or $9.99 for 1 year. Sending a different coin or on a different network will be lost and can't be recovered.</div>
+
+    <div class="label">Then paste your transaction hash</div>
+    <input id="tx" placeholder="0x… (from your wallet's activity)" autocomplete="off" spellcheck="false">
+    <button class="verify" id="verify">Verify &amp; activate</button>
+
     <div class="msg" id="msg"></div>
-    <p class="device" id="device"></p>
-    <p class="device"><a href="index.html">← Back to Mona Lisa</a></p>
+
+    <p class="foot">Device <span id="device">…</span></p>
+    <p class="foot"><a href="index.html">← Back to Mona Lisa</a></p>
   </div>
 
   <script>
-    // ── Paddle account settings — fill these in after creating the product ──
-    const PADDLE_ENVIRONMENT = "production";               // live
-    const PADDLE_CLIENT_TOKEN = "live_6921e35c310bd2a211775d1498a"; // live client-side (publishable) token
-    const PADDLE_PRICE_ID     = "pri_01kxjkn39y5p7grdb5375v6y3s"; // "Annual — 1 Mac", 7-day free trial then $9.99/yr
-
+    const WORKER = "https://mona-lisa-license.mona-lisa.workers.dev";
     const params = new URLSearchParams(location.search);
     const deviceId = params.get("device");
-    const btn = document.getElementById("subscribe");
     const msg = document.getElementById("msg");
+    const btn = document.getElementById("verify");
+    const txInput = document.getElementById("tx");
 
-    function fail(text) { msg.textContent = text; msg.classList.add("err"); btn.disabled = true; btn.textContent = "Unavailable"; }
-
+    document.getElementById("device").textContent = deviceId ? deviceId.slice(0, 12) : "unknown";
     if (!deviceId) {
-      fail("No device specified. Open this page from the Mona Lisa app.");
-    } else {
-      document.getElementById("device").textContent = "Device " + deviceId.slice(0, 12);
-      try {
-        if (PADDLE_ENVIRONMENT === "sandbox") Paddle.Environment.set("sandbox");
-        Paddle.Initialize({ token: PADDLE_CLIENT_TOKEN });
-        btn.disabled = false;
-        btn.textContent = "Start 7-day free trial";
-      } catch (e) {
-        fail("Checkout failed to load. Please try again.");
-      }
+      msg.textContent = "No device specified — open this page from the Mona Lisa app.";
+      msg.className = "msg err"; btn.disabled = true;
     }
 
+    document.getElementById("copy").addEventListener("click", () => {
+      navigator.clipboard.writeText(document.getElementById("addr").textContent.trim());
+      const b = document.getElementById("copy"); b.textContent = "Copied"; setTimeout(() => (b.textContent = "Copy"), 1500);
+    });
+
     btn.addEventListener("click", () => {
-      msg.textContent = ""; msg.classList.remove("err");
-      Paddle.Checkout.open({
-        items: [{ priceId: PADDLE_PRICE_ID, quantity: 1 }],
-        // Rides through to the subscription and every webhook as custom_data.device_id,
-        // so the backend binds this subscription to this exact Mac.
-        customData: { device_id: deviceId },
-        settings: { displayMode: "overlay", theme: "dark" }
-      });
+      const tx = txInput.value.trim();
+      if (!/^0x[0-9a-fA-F]{64}$/.test(tx)) { msg.textContent = "Paste the full transaction hash (0x… 64 characters)."; msg.className = "msg err"; return; }
+      btn.disabled = true; msg.textContent = "Checking the blockchain…"; msg.className = "msg info";
+      fetch(`${WORKER}/crypto/verify?device=${encodeURIComponent(deviceId)}&tx=${encodeURIComponent(tx)}`)
+        .then(async (r) => ({ ok: r.ok, body: await r.json() }))
+        .then(({ ok, body }) => {
+          if (ok && body.ok) {
+            const until = new Date(body.expiresAt * 1000).toLocaleDateString();
+            msg.innerHTML = `✅ Activated — protection is on for this Mac until <strong>${until}</strong>.<br>Return to Mona Lisa and click <strong>Start Watching</strong>.`;
+            msg.className = "msg ok"; btn.textContent = "Activated";
+          } else {
+            msg.textContent = body.error || "Couldn't verify that payment. Please try again.";
+            msg.className = "msg err"; btn.disabled = false;
+          }
+        })
+        .catch(() => { msg.textContent = "Network error — please try again."; msg.className = "msg err"; btn.disabled = false; });
     });
   </script>
 </body>
