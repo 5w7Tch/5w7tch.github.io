@@ -232,14 +232,13 @@
         <p>Grab <a href="https://github.com/5w7Tch/5w7tch.github.io/releases/latest/download/MonaLisa.dmg">MonaLisa.dmg</a>, open it, and drag <strong>Mona Lisa</strong> onto the <strong>Applications</strong> shortcut.</p>
       </li>
       <li>
-        <h3>Get past Gatekeeper (one time)</h3>
-        <p>This build isn't notarized, so macOS blocks the first launch. Open <strong>System Settings → Privacy&nbsp;&amp;&nbsp;Security</strong>, scroll to <em>“Mona Lisa” was blocked</em>, and click <strong>Open&nbsp;Anyway</strong>. Or clear the flag in Terminal:</p>
-        <div class="code-block">
-          <code>xattr -d com.apple.quarantine "/Applications/Mona Lisa.app"</code>
-          <button class="copy-btn" type="button" data-copy='xattr -d com.apple.quarantine "/Applications/Mona Lisa.app"' aria-label="Copy command">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          </button>
-        </div>
+        <h3>Open it the first time</h3>
+        <p>Mona Lisa is distributed independently — not through the App&nbsp;Store — so macOS asks you to confirm the very first time you open it. This is normal for indie apps, and you only do it once:</p>
+        <ul class="install-substeps">
+          <li><strong>Right&#8209;click</strong> (or Control&#8209;click) <strong>Mona&nbsp;Lisa</strong> in your Applications folder, choose <strong>Open</strong>, then click <strong>Open</strong> in the dialog.</li>
+          <li>Or open <strong>System Settings → Privacy&nbsp;&amp;&nbsp;Security</strong>, scroll down to <em>“Mona Lisa” was blocked</em>, and click <strong>Open&nbsp;Anyway</strong>.</li>
+        </ul>
+        <p>After that, it launches normally like any other app.</p>
       </li>
       <li>
         <h3>Enroll, set a password, go</h3>

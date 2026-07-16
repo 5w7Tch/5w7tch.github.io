@@ -558,7 +558,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
   max-width: 780px;
 }
 
-.install-steps li {
+.install-steps > li {
   counter-increment: install;
   position: relative;
   background: var(--bg);
@@ -566,7 +566,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
   border-radius: var(--radius);
   padding: 26px 28px 26px 86px;
 }
-.install-steps li::before {
+.install-steps > li::before {
   content: counter(install);
   position: absolute;
   left: 26px; top: 26px;
@@ -583,6 +583,9 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
 .install-steps h3 { font-size: 1.15rem; margin-bottom: 8px; }
 .install-steps p { color: var(--text-muted); font-size: .96rem; }
 .install-steps p strong, .install-steps p em { color: var(--text); }
+.install-substeps { margin: 10px 0; padding-left: 18px; list-style: disc; }
+.install-substeps li { color: var(--text-muted); font-size: .93rem; line-height: 1.5; margin-bottom: 7px; }
+.install-substeps li strong, .install-substeps li em { color: var(--text); }
 
 .code-block {
   position: relative;
@@ -1015,7 +1018,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
   .nav-links { display: none; }
   .section { padding: 72px 0; }
   .features-mini { grid-template-columns: 1fr; }
-  .install-steps li { padding: 24px 22px 24px 22px; }
+  .install-steps > li { padding: 24px 22px 24px 22px; }
   .install-steps li::before { position: static; margin-bottom: 12px; }
   .release-head time { margin-left: 0; width: 100%; }
 }
