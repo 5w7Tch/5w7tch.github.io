@@ -72,23 +72,50 @@ document.getElementById("year").textContent = new Date().getFullYear();
   spy();
 }
 
-// Version timeline: let a normal (vertical) scroll move the strip left→right,
-// releasing at the ends so the page keeps scrolling past the section.
+// Version timeline: a pinned section where the page's own vertical scroll moves
+// the cards horizontally (newest → oldest), then releases so the page keeps
+// scrolling. Scroll-linked, so it feels continuous. Small screens / reduced
+// motion fall back to a plain swipeable strip (handled in CSS).
 {
-  const strip = document.querySelector(".timeline");
-  if (strip) {
-    strip.addEventListener(
-      "wheel",
-      (e) => {
-        if (!e.deltaY) return; // trackpad horizontal (deltaX) scrolls natively
-        const atStart = strip.scrollLeft <= 0;
-        const atEnd = Math.ceil(strip.scrollLeft + strip.clientWidth) >= strip.scrollWidth;
-        if ((e.deltaY < 0 && atStart) || (e.deltaY > 0 && atEnd)) return;
-        e.preventDefault();
-        strip.scrollLeft += e.deltaY;
-      },
-      { passive: false }
+  const sec = document.querySelector(".vscroll");
+  const track = document.querySelector(".vtrack");
+  if (sec && track) {
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(
+        (es) => { for (const e of es) sec.classList.toggle("in", e.isIntersecting); },
+        { threshold: 0.12 }
+      ).observe(sec);
+    } else {
+      sec.classList.add("in");
+    }
+
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let travel = 0;
+    const enabled = () => window.innerWidth > 960 && !reduce.matches;
+
+    const tick = () => {
+      if (travel <= 0) return;
+      const total = sec.offsetHeight - window.innerHeight;
+      const p = Math.min(1, Math.max(0, -sec.getBoundingClientRect().top / total));
+      track.style.transform = `translateX(${(-p * travel).toFixed(1)}px)`;
+    };
+    const measure = () => {
+      if (!enabled()) { sec.style.height = ""; track.style.transform = ""; travel = 0; return; }
+      travel = Math.max(0, track.scrollWidth - window.innerWidth);
+      sec.style.height = travel > 0 ? window.innerHeight + travel + "px" : "";
+      tick();
+    };
+
+    let raf = false;
+    window.addEventListener(
+      "scroll",
+      () => { if (!raf) { raf = true; requestAnimationFrame(() => { raf = false; tick(); }); } },
+      { passive: true }
     );
+    window.addEventListener("resize", measure);
+    if (reduce.addEventListener) reduce.addEventListener("change", measure);
+    window.addEventListener("load", measure);
+    measure();
   }
 }
 
@@ -101,7 +128,7 @@ if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     ".step, .features-mini li, .install-steps li, .source-build"
   );
   const upTargets = document.querySelectorAll(
-    ".section h2, .section-lede, .honesty-mini, .final-cta .cta-row, .final-note, .tl-item"
+    ".section h2, .section-lede, .honesty-mini, .final-cta .cta-row, .final-note"
   );
 
   const mid = window.innerWidth / 2;
