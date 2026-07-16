@@ -84,8 +84,12 @@
     const USDC   = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"; // USDC on Base
     const BASE_HEX = "0x2105"; // 8453
 
-    const params = new URLSearchParams(location.search);
-    const deviceId = params.get("device");
+    // Read the device id from the URL fragment (#device=…), not the query string:
+    // a 64-char hex value in ?device= tripped Chrome Safe Browsing ("Dangerous
+    // site"), and fragments are stripped before those URL checks. (?device= is
+    // still accepted as a fallback for older links.)
+    const deviceId = new URLSearchParams(location.hash.replace(/^#/, "")).get("device")
+                  || new URLSearchParams(location.search).get("device");
     const msg = document.getElementById("msg");
     const set = (t, cls) => { msg.innerHTML = t; msg.className = "msg " + cls; };
     const enc = encodeURIComponent;
@@ -136,7 +140,7 @@
     const cbtns = [...document.querySelectorAll(".cbtn")];
     const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     function showWalletApps() {
-      const here = location.host + location.pathname + location.search;
+      const here = location.host + location.pathname + location.hash;
       document.getElementById("mmLink").href = "https://metamask.app.link/dapp/" + here;
       document.getElementById("cbLink").href = "https://go.cb-w.com/dapp?cb_url=" + enc(location.href);
       document.getElementById("wallets").style.display = "block";
