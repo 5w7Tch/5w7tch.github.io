@@ -50,8 +50,8 @@
     <h1>Unlock this Mac</h1>
     <p class="sub">Pay by card — this Mac unlocks automatically the moment your payment goes through. Covers this Mac only.</p>
 
-    <a class="buy primary" id="buyYear" href="#" target="_blank" rel="noopener">Buy 1 year <span class="per">$9.99</span></a>
-    <a class="buy secondary" id="buyMonth" href="#" target="_blank" rel="noopener">Buy 1 month <span class="per">$0.99</span></a>
+    <a class="buy primary gumroad-button" id="buyYear" href="#">Buy 1 year <span class="per">$9.99</span></a>
+    <a class="buy secondary gumroad-button" id="buyMonth" href="#">Buy 1 month <span class="per">$0.99</span></a>
 
     <div class="msg" id="msg"></div>
 
@@ -71,6 +71,9 @@
     <p class="foot">Device <span id="device">…</span></p>
     <p class="foot"><a href="index.html">← Back to Mona Lisa</a></p>
   </div>
+
+  <!-- Gumroad overlay: opens checkout as a modal on this page (card handled by Gumroad, never us). -->
+  <script src="https://gumroad.com/js/gumroad.js"></script>
 
   <script type="module">
     import { ethers } from "https://esm.sh/ethers@6.13.4";
