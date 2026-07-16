@@ -72,6 +72,26 @@ document.getElementById("year").textContent = new Date().getFullYear();
   spy();
 }
 
+// Version timeline: let a normal (vertical) scroll move the strip left→right,
+// releasing at the ends so the page keeps scrolling past the section.
+{
+  const strip = document.querySelector(".timeline");
+  if (strip) {
+    strip.addEventListener(
+      "wheel",
+      (e) => {
+        if (!e.deltaY) return; // trackpad horizontal (deltaX) scrolls natively
+        const atStart = strip.scrollLeft <= 0;
+        const atEnd = Math.ceil(strip.scrollLeft + strip.clientWidth) >= strip.scrollWidth;
+        if ((e.deltaY < 0 && atStart) || (e.deltaY > 0 && atEnd)) return;
+        e.preventDefault();
+        strip.scrollLeft += e.deltaY;
+      },
+      { passive: false }
+    );
+  }
+}
+
 if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
   // ---------- Scroll reveal ----------
   // Blocks slide in from whichever side they sit on and rise slightly;
