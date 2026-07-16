@@ -28,17 +28,10 @@
   .pay .per { font-weight: 500; opacity: .8; font-size: .9rem; }
   .msg { margin-top: 18px; font-size: .9rem; min-height: 1.2em; line-height: 1.5; }
   .msg.err { color: #ff8a7a; } .msg.ok { color: #7ee0a0; } .msg.info { color: var(--gold); }
-  details { margin-top: 22px; text-align: left; }
-  summary { cursor: pointer; color: #8a8a8a; font-size: .85rem; }
-  .manual { margin-top: 12px; }
-  .manual .label { font-size: .78rem; color: #8a8a8a; margin-bottom: 5px; }
-  .addr { font-family: ui-monospace, Menlo, monospace; font-size: .78rem; color: #d8d8d8; word-break: break-all;
-          background: #0c0c0c; border: 1px solid rgba(255,255,255,.12); border-radius: 8px; padding: 9px; }
-  .manual input { width: 100%; font: inherit; font-family: ui-monospace, Menlo, monospace; font-size: .78rem;
-          color: #f5f5f5; background: #0c0c0c; border: 1px solid rgba(255,255,255,.14); border-radius: 8px;
-          padding: 9px; margin: 8px 0; }
-  .manual button { width: 100%; cursor: pointer; font: inherit; font-weight: 600; background: #1e1e1e; color: #f5f5f5;
-          border: 1px solid rgba(255,255,255,.14); border-radius: 8px; padding: 10px; }
+  .wsep { font-size: .78rem; color: #8a8a8a; margin: 18px 0 10px; }
+  .wbtn { display: block; text-decoration: none; font-weight: 600; font-size: .95rem; color: #f5f5f5;
+          background: #1e1e1e; border: 1px solid rgba(255,255,255,.14); border-radius: 10px; padding: 13px; margin-bottom: 9px; }
+  .wbtn:hover { filter: brightness(1.12); }
   .net { font-size: .78rem; color: #ffcf6b; margin-top: 14px; }
   .foot { margin-top: 20px; font-size: .72rem; color: #6a6a6a; word-break: break-all; }
   a { color: var(--gold); text-decoration: none; }
@@ -56,17 +49,13 @@
     <button class="pay secondary" data-units="990000" data-label="1 month">Pay $0.99 <span class="per">1 month</span></button>
 
     <div class="msg" id="msg"></div>
-    <div class="net">Pays in USDC on the Base network. Needs a browser wallet (MetaMask / Coinbase Wallet).</div>
+    <div class="net">Pays in USDC on the Base network.</div>
 
-    <details>
-      <summary>Paying from a phone or exchange instead?</summary>
-      <div class="manual">
-        <div class="label">Send USDC (Base) to this address, then paste the transaction hash:</div>
-        <div class="addr" id="addr">0x071056FaE2fB98Fbb90e368b66e11BeeC0b0ddcc</div>
-        <input id="tx" placeholder="0x… transaction hash" autocomplete="off" spellcheck="false">
-        <button id="manualVerify" type="button">Verify &amp; activate</button>
-      </div>
-    </details>
+    <div id="wallets" style="display:none">
+      <div class="wsep">Open in your wallet app to pay</div>
+      <a class="wbtn" id="mmLink" href="#">Open in MetaMask</a>
+      <a class="wbtn" id="cbLink" href="#">Open in Coinbase Wallet</a>
+    </div>
 
     <p class="foot">Device <span id="device">…</span></p>
     <p class="foot"><a href="index.html">← Back to Mona Lisa</a></p>
@@ -87,6 +76,16 @@
     document.getElementById("device").textContent = deviceId ? deviceId.slice(0, 12) : "unknown";
     const set = (t, cls) => { msg.innerHTML = t; msg.className = "msg " + cls; };
     if (!deviceId) { set("No device specified — open this page from the Mona Lisa app.", "err"); buttons.forEach(b => b.disabled = true); }
+
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    // Deep links that reopen THIS page inside the wallet app's in-app browser (where a wallet is available).
+    function showWalletApps() {
+      const here = location.host + location.pathname + location.search;
+      document.getElementById("mmLink").href = "https://metamask.app.link/dapp/" + here;
+      document.getElementById("cbLink").href = "https://go.cb-w.com/dapp?cb_url=" + encodeURIComponent(location.href);
+      document.getElementById("wallets").style.display = "block";
+      buttons.forEach(b => b.style.display = "none");
+    }
 
     async function ensureBase(provider) {
       const net = await provider.getNetwork();
@@ -122,7 +121,11 @@
     }
 
     async function pay(units, label) {
-      if (!window.ethereum) { set("No browser wallet found. Install MetaMask or Coinbase Wallet — or use the phone/exchange option below.", "err"); return; }
+      if (!window.ethereum) {
+        if (isMobile) { showWalletApps(); return; }
+        set("No wallet found in this browser. Install the MetaMask or Coinbase Wallet extension, then reload — or open this page on your phone.", "err");
+        return;
+      }
       buttons.forEach(b => b.disabled = true);
       try {
         const provider = new ethers.BrowserProvider(window.ethereum);
@@ -144,13 +147,8 @@
 
     buttons.forEach(b => b.addEventListener("click", () => pay(b.dataset.units, b.dataset.label)));
 
-    // Manual fallback (paste a tx hash)
-    document.getElementById("manualVerify").addEventListener("click", () => {
-      const tx = document.getElementById("tx").value.trim();
-      if (!/^0x[0-9a-fA-F]{64}$/.test(tx)) { set("Paste the full transaction hash (0x… 64 characters).", "err"); return; }
-      set("Checking the blockchain…", "info");
-      activate(tx);
-    });
+    // On a phone's normal browser there's no wallet — offer the wallet apps up front.
+    if (isMobile && !window.ethereum && deviceId) showWalletApps();
   </script>
 </body>
 </html>
