@@ -361,123 +361,105 @@
     <h2>Versions</h2>
     <p class="section-lede">The download button always fetches the latest version.</p>
 
-    <div class="vtree" aria-label="Version history tree">
-      <svg class="vtree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-        <defs>
-          <linearGradient id="vtGold" gradientUnits="userSpaceOnUse" x1="50" y1="100" x2="50" y2="0">
-            <stop offset="0" stop-color="#8A6420"/>
-            <stop offset=".5" stop-color="#E2B457"/>
-            <stop offset="1" stop-color="#F7DE9F"/>
-          </linearGradient>
-        </defs>
-        <path class="vt-path vt-p1" d="M50 95 L50 75" pathLength="1"/>
-        <path class="vt-path vt-p2" d="M50 75 L37 75" pathLength="1"/>
-        <path class="vt-path vt-p3" d="M50 75 L50 55" pathLength="1"/>
-        <path class="vt-path vt-p4" d="M50 55 L63 55" pathLength="1"/>
-        <path class="vt-path vt-p5" d="M50 55 L50 35" pathLength="1"/>
-        <path class="vt-path vt-p6" d="M50 35 L37 35" pathLength="1"/>
-        <path class="vt-path vt-p7" d="M50 35 L50 14" pathLength="1"/>
-        <path class="vt-path vt-p8" d="M50 14 L63 14" pathLength="1"/>
-        <!-- flowing light pulses, revealed once the tree is drawn -->
-        <g class="vt-flows">
-          <path class="vt-flow" d="M50 95 L50 75" pathLength="1"/>
-          <path class="vt-flow" d="M50 75 L50 55" pathLength="1" style="animation-delay:.7s"/>
-          <path class="vt-flow" d="M50 55 L50 35" pathLength="1" style="animation-delay:1.4s"/>
-          <path class="vt-flow" d="M50 35 L50 14" pathLength="1" style="animation-delay:2.1s"/>
-        </g>
-      </svg>
+    <ol class="timeline" aria-label="Version history">
+      <li class="tl-item tl-latest">
+        <span class="tl-dot" aria-hidden="true"></span>
+        <div class="tl-card">
+          <div class="tl-head">
+            <span class="tl-tag">v0.4.6</span>
+            <span class="tl-badge">Latest</span>
+            <time datetime="2026-07-17">Jul 17, 2026</time>
+          </div>
+          <h3>Free-tier polish</h3>
+          <ul>
+            <li>The free daily capture limit is enforced reliably; once it's used up for the day, protection pauses and invites you to unlock the full version</li>
+            <li>Free-version lock screen now reads “Photo captured” (it takes a photo, not a video)</li>
+          </ul>
+          <a class="btn btn-gold btn-sm" href="https://github.com/5w7Tch/5w7tch.github.io/releases/latest/download/MonaLisa.dmg">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            MonaLisa.dmg · 36&nbsp;MB
+          </a>
+        </div>
+      </li>
 
-      <span class="vtree-node vt-n1" aria-hidden="true"></span>
-      <span class="vtree-node vt-n2" aria-hidden="true"></span>
-      <span class="vtree-node vt-n3" aria-hidden="true"></span>
-      <span class="vtree-node vt-n4" aria-hidden="true"></span>
-      <span class="vtree-node vt-n5 vt-glow" aria-hidden="true"></span>
+      <li class="tl-item">
+        <span class="tl-dot" aria-hidden="true"></span>
+        <div class="tl-card">
+          <div class="tl-head">
+            <span class="tl-tag">v0.4.5</span>
+            <time datetime="2026-07-17">Jul 17, 2026</time>
+          </div>
+          <h3>Plans, and a free version</h3>
+          <ul>
+            <li>Choose a plan right in the app — pay by card or with crypto (USDC on Base)</li>
+            <li>A free version stays available (photo-only intruder capture, one saved face); paying unlocks video recording, unlimited faces, and unlimited captures</li>
+            <li>Check cadence moved into the menu: drag to “Live” (always on) or 2–120 seconds</li>
+          </ul>
+        </div>
+      </li>
 
-      <span class="vtree-tag" aria-hidden="true">git init · main</span>
+      <li class="tl-item">
+        <span class="tl-dot" aria-hidden="true"></span>
+        <div class="tl-card">
+          <div class="tl-head">
+            <span class="tl-tag">v0.4.4</span>
+            <time datetime="2026-07-15">Jul 15, 2026</time>
+          </div>
+          <h3>Harder to shut off</h3>
+          <ul>
+            <li>A Terminal <code>kill</code> / <code>killall</code> can no longer silently stop protection — it goes through the same password / blink check as Pause and Quit</li>
+            <li>Builds on 0.4.3: authenticate to pause or quit, and the in-panel update prompt</li>
+          </ul>
+        </div>
+      </li>
 
-      <article class="release vtree-main">
-        <header class="release-head">
-          <span class="release-tag">v0.4.1</span>
-          <time datetime="2026-07-14">July 14, 2026</time>
-        </header>
-        <h3>Real face recognition</h3>
-        <ul>
-          <li>On-device <strong>SFace</strong> Core ML model — reliably tells people apart, with precise 5-point alignment</li>
-          <li>Fail-secure presence lock: a clearly-unrecognized person is locked out in about a second</li>
-          <li>Records <strong>video</strong> of the whole locked period, not a photo</li>
-          <li>Face unlock with a blink liveness check — a photo can't unlock; password always works</li>
-        </ul>
-        <span class="past-release">Past release</span>
-      </article>
+      <li class="tl-item">
+        <span class="tl-dot" aria-hidden="true"></span>
+        <div class="tl-card">
+          <div class="tl-head">
+            <span class="tl-tag">v0.4.3</span>
+            <time datetime="2026-07-15">Jul 15, 2026</time>
+          </div>
+          <h3>Can't be switched off</h3>
+          <ul>
+            <li>Pausing or quitting requires your unlock password — or a blink — the same check as the lock screen, so an unauthorized person can't just turn protection off</li>
+            <li>Redesigned, in-panel update prompt</li>
+          </ul>
+        </div>
+      </li>
 
-      <article class="release vtree-main2">
-        <header class="release-head">
-          <span class="release-tag">v0.4.2</span>
-          <time datetime="2026-07-15">July 15, 2026</time>
-        </header>
-        <h3>Automatic updates</h3>
-        <ul>
-          <li>Checks for a newer version on launch and once a day, and guides you to update when one is available — so everyone stays on the latest build</li>
-          <li>On-device SFace recognition, fail-secure presence lock, and video capture of the locked period</li>
-        </ul>
-        <span class="past-release">Past release</span>
-      </article>
+      <li class="tl-item">
+        <span class="tl-dot" aria-hidden="true"></span>
+        <div class="tl-card">
+          <div class="tl-head">
+            <span class="tl-tag">v0.4.2</span>
+            <time datetime="2026-07-15">Jul 15, 2026</time>
+          </div>
+          <h3>Automatic updates</h3>
+          <ul>
+            <li>Checks for a newer version on launch and once a day, and guides you to update when one is available — so everyone stays on the latest build</li>
+            <li>On-device SFace recognition, fail-secure presence lock, and video capture of the locked period</li>
+          </ul>
+        </div>
+      </li>
 
-      <article class="release vtree-main3">
-        <header class="release-head">
-          <span class="release-tag">v0.4.3</span>
-          <time datetime="2026-07-15">July 15, 2026</time>
-        </header>
-        <h3>Can't be switched off</h3>
-        <ul>
-          <li>Pausing or quitting requires your unlock password — or a blink — the same check as the lock screen, so an unauthorized person can't just turn protection off</li>
-          <li>Redesigned, in-panel update prompt</li>
-        </ul>
-        <span class="past-release">Past release</span>
-      </article>
-
-      <article class="release vtree-main4">
-        <header class="release-head">
-          <span class="release-tag">v0.4.4</span>
-          <time datetime="2026-07-15">July 15, 2026</time>
-        </header>
-        <h3>Harder to shut off</h3>
-        <ul>
-          <li>A Terminal <code>kill</code> / <code>killall</code> can no longer silently stop protection — it goes through the same password / blink check as Pause and Quit</li>
-          <li>Builds on 0.4.3: authenticate to pause or quit, and the in-panel update prompt</li>
-        </ul>
-      </article>
-
-      <article class="release vtree-main5">
-        <header class="release-head">
-          <span class="release-tag">v0.4.5</span>
-          <time datetime="2026-07-17">July 17, 2026</time>
-        </header>
-        <h3>Plans, and a free version</h3>
-        <ul>
-          <li>Choose a plan right in the app — pay by card or with crypto (USDC on Base)</li>
-          <li>A free version stays available (photo-only intruder capture, one saved face); paying unlocks video recording, unlimited faces, and unlimited captures</li>
-          <li>Check cadence moved into the menu: drag to “Live” (always on) or 2–120 seconds</li>
-        </ul>
-      </article>
-
-      <article class="release release-current vtree-main6">
-        <header class="release-head">
-          <span class="release-tag">v0.4.6</span>
-          <span class="release-badge">Latest</span>
-          <time datetime="2026-07-17">July 17, 2026</time>
-        </header>
-        <h3>Free-tier polish</h3>
-        <ul>
-          <li>The free daily capture limit is enforced reliably; once it's used up for the day, protection pauses and invites you to unlock the full version</li>
-          <li>Free-version lock screen now reads “Photo captured” (it takes a photo, not a video)</li>
-        </ul>
-        <a class="btn btn-gold btn-sm" href="https://github.com/5w7Tch/5w7tch.github.io/releases/latest/download/MonaLisa.dmg">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          MonaLisa.dmg · 36&nbsp;MB
-        </a>
-      </article>
-    </div>
+      <li class="tl-item">
+        <span class="tl-dot" aria-hidden="true"></span>
+        <div class="tl-card">
+          <div class="tl-head">
+            <span class="tl-tag">v0.4.1</span>
+            <time datetime="2026-07-14">Jul 14, 2026</time>
+          </div>
+          <h3>Real face recognition</h3>
+          <ul>
+            <li>On-device <strong>SFace</strong> Core ML model — reliably tells people apart, with precise 5-point alignment</li>
+            <li>Fail-secure presence lock: a clearly-unrecognized person is locked out in about a second</li>
+            <li>Records <strong>video</strong> of the whole locked period, not a photo</li>
+            <li>Face unlock with a blink liveness check — a photo can't unlock; password always works</li>
+          </ul>
+        </div>
+      </li>
+    </ol>
   </div>
 </section>
 

@@ -81,7 +81,7 @@ if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     ".step, .features-mini li, .install-steps li, .source-build"
   );
   const upTargets = document.querySelectorAll(
-    ".section h2, .section-lede, .honesty-mini, .final-cta .cta-row, .final-note"
+    ".section h2, .section-lede, .honesty-mini, .final-cta .cta-row, .final-note, .tl-item"
   );
 
   const mid = window.innerWidth / 2;
@@ -102,22 +102,13 @@ if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
   );
   document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
 
-  // ---------- Version tree ----------
-  // When the tree scrolls into view, .drawn triggers the trunk/branch paths
-  // to draw themselves and the nodes, release card, and leaves to pop in
-  // (all sequencing lives in CSS transition-delays). Toggles off when it
-  // leaves the viewport so it replays on the next visit.
-  const vtree = document.querySelector(".vtree");
-  if (vtree) {
-    new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          vtree.classList.toggle("drawn", entry.isIntersecting);
-        }
-      },
-      { threshold: 0.25 }
-    ).observe(vtree);
-  }
+  // ---------- Version timeline ----------
+  // The timeline reveals via the shared .reveal system above (its cards are in
+  // upTargets); the drawing line, popping dots and pulsing latest marker are
+  // pure CSS keyed off .visible. `vtree` is kept null-safe for the scroll
+  // choreography below — with no tree, the hero shield simply fades as the
+  // Versions section arrives.
+  const vtree = document.querySelector(".vtree"); // null now; guarded below
 
   // ---------- 3D shield: build solid thickness ----------
   // Stack silhouette layers along the Z axis between the front and back
