@@ -50,16 +50,16 @@
     <h1>Unlock this Mac</h1>
     <p class="sub">Pay by card — this Mac unlocks automatically the moment your payment goes through. Covers this Mac only.</p>
 
-    <a class="buy primary" id="buyYear" href="#" target="_blank" rel="noopener">Buy 1 year <span class="per">$9.99</span></a>
-    <a class="buy secondary" id="buyMonth" href="#" target="_blank" rel="noopener">Buy 1 month <span class="per">$0.99</span></a>
+    <a class="buy primary" id="buyYear" href="#" target="_blank" rel="noopener">Buy 1 year <span class="per">$49.99</span></a>
+    <a class="buy secondary" id="buyMonth" href="#" target="_blank" rel="noopener">Buy 1 month <span class="per">$4.99</span></a>
 
     <div class="msg" id="msg"></div>
 
     <details>
       <summary>Prefer to pay with crypto?</summary>
       <div class="crypto">
-        <button class="cbtn" data-units="9990000">Pay with wallet — 1 year <span class="per">$9.99</span></button>
-        <button class="cbtn" data-units="990000">Pay with wallet — 1 month <span class="per">$0.99</span></button>
+        <button class="cbtn" data-units="49990000">Pay with wallet — 1 year <span class="per">$49.99</span></button>
+        <button class="cbtn" data-units="4990000">Pay with wallet — 1 month <span class="per">$4.99</span></button>
         <div id="wallets" style="display:none">
           <a class="wbtn" id="mmLink" href="#">Open in MetaMask</a>
           <a class="wbtn" id="cbLink" href="#">Open in Coinbase Wallet</a>
@@ -76,9 +76,8 @@
     import { ethers } from "https://esm.sh/ethers@6.13.4";
 
     const WORKER = "https://mona-lisa-license.mona-lisa.workers.dev";
-    // Gumroad product links — replace with your two product URLs after creating them.
-    const GUM_YEAR_URL  = "https://nurch.gumroad.com/l/monalisa-year";
-    const GUM_MONTH_URL = "https://nurch.gumroad.com/l/monalisa-month";
+    // Card checkout goes through the Worker: it mints a Whop checkout session
+    // carrying this Mac's id and redirects to Whop's hosted checkout.
     // Crypto (fallback)
     const WALLET = "0x071056FaE2fB98Fbb90e368b66e11BeeC0b0ddcc";
     const USDC   = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"; // USDC on Base
@@ -95,10 +94,9 @@
     const enc = encodeURIComponent;
     document.getElementById("device").textContent = deviceId ? deviceId.slice(0, 12) : "unknown";
 
-    // Card buy links carry the device id so the whole flow stays tied to this Mac.
-    const q = deviceId ? "?device=" + enc(deviceId) : "";
-    document.getElementById("buyYear").href  = GUM_YEAR_URL + q;
-    document.getElementById("buyMonth").href = GUM_MONTH_URL + q;
+    // Card buy links go through the Worker (device id embedded → Whop checkout).
+    document.getElementById("buyYear").href  = `${WORKER}/whop/checkout?device=${enc(deviceId || "")}&plan=year`;
+    document.getElementById("buyMonth").href = `${WORKER}/whop/checkout?device=${enc(deviceId || "")}&plan=month`;
 
     if (!deviceId) {
       set("No device specified — open this page from the Mona Lisa app.", "err");
@@ -111,7 +109,7 @@
       set(`✅ Activated — protection is on for this Mac${when}.<br>Return to Mona Lisa and click <strong>Start Watching</strong>.`, "ok");
     }
 
-    // --- Card path: Gumroad tells our backend on payment; we poll until this Mac is active ---
+    // --- Card path: Whop tells our backend on payment; we poll until this Mac is active ---
     let polling = false;
     async function checkLicense() {
       try {
@@ -122,7 +120,7 @@
     }
     async function pollAfterPurchase() {
       if (polling || !deviceId) return; polling = true;
-      set("After you complete payment in the Gumroad tab, this page unlocks automatically…", "info");
+      set("After you complete payment in the checkout tab, this page unlocks automatically…", "info");
       for (let i = 0; i < 45; i++) {
         const b = await checkLicense();
         if (b) { showActivated(b); polling = false; return; }
